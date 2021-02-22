@@ -62,13 +62,13 @@ class _HomePageState extends State<HomePage> {
           text: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                  text: 'Flutter',
+                  text: 'V6',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontFamily: 'PoppinsBold')),
               TextSpan(
-                  text: 'E-Commerce',
+                  text: 'Store',
                   style: TextStyle(
                       fontSize: 18,
                       color: Color(0xFF016DF7),
