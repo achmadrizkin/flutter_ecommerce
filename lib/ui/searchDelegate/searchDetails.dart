@@ -12,10 +12,27 @@ class SearchDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(name,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontFamily: 'PoppinsBold'))),
       body: SafeArea(
         child: Column(
           children: [
-            Text(name),
+            Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              height: 250,
+            ),
             Text(stock),
             Text(price),
             Text(imageUrl),
