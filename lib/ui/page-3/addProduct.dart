@@ -23,7 +23,16 @@ class _AddProductState extends State<AddProduct> {
 
   // drop down bottom
   String selectedProducts = 'Clothes';
-  List listCategoryProducts = ['Clothes', 'Book', 'Food', 'Shoes'];
+  List listCategoryProducts = [
+    'Clothes',
+    'Book',
+    'Food',
+    'Shoes',
+    'Electronics'
+  ];
+
+  String selectedProductCondition = 'New';
+  List listProductCondition = ['New', 'Used', 'Renewed'];
 
   // get local image
   File image;
@@ -117,6 +126,7 @@ class _AddProductState extends State<AddProduct> {
         'description': descriptionProductController.text,
         'price': priceProductController.text,
         'url': url,
+        'condition': selectedProductCondition,
       });
 
       await FirebaseFirestore.instance.collection('allProduct').add({
@@ -126,6 +136,7 @@ class _AddProductState extends State<AddProduct> {
         'price': priceProductController.text,
         'url': url,
         'searchIndex': indexList,
+        'condition': selectedProductCondition,
       });
 
       await FirebaseFirestore.instance.collection('myProduct').add({
@@ -134,6 +145,7 @@ class _AddProductState extends State<AddProduct> {
         'description': descriptionProductController.text,
         'price': priceProductController.text,
         'url': url,
+        'condition': selectedProductCondition,
       });
     }
   }
@@ -185,29 +197,43 @@ class _AddProductState extends State<AddProduct> {
                     child: Column(
                       children: [
                         _showImage(),
-                        (image == null)
-                            ? ButtonTheme(
-                                child: RaisedButton(
-                                  onPressed: () =>
-                                      getImage(ImageSource.gallery),
-                                  child: Text(
-                                    'Add Image',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(height: 0),
-                        (image == null)
-                            ? ButtonTheme(
-                                child: RaisedButton(
-                                  onPressed: () => getImage(ImageSource.camera),
-                                  child: Text(
-                                    'Take a picture',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(height: 0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            (image == null)
+                                ? FlatButton(
+                                    height: 45,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    color: Color(0xFF016DF7),
+                                    onPressed: () =>
+                                        getImage(ImageSource.gallery),
+                                    child: Text('Add Image',
+                                        style: TextStyle(
+                                            fontFamily: 'PoppinsBold',
+                                            color: Colors.white,
+                                            fontSize: 16)),
+                                  )
+                                : SizedBox(height: 0),
+                            (image == null)
+                                ? FlatButton(
+                                    height: 45,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    color: Color(0xFF016DF7),
+                                    onPressed: () =>
+                                        getImage(ImageSource.camera),
+                                    child: Text('Take a picture',
+                                        style: TextStyle(
+                                            fontFamily: 'PoppinsBold',
+                                            color: Colors.white,
+                                            fontSize: 16)),
+                                  )
+                                : SizedBox(height: 0),
+                          ],
+                        ),
                         SizedBox(height: 10),
                         TextFormField(
                           keyboardType: TextInputType.text,
@@ -220,7 +246,7 @@ class _AddProductState extends State<AddProduct> {
                           decoration: InputDecoration(
                             labelText: 'Product',
                             labelStyle: TextStyle(
-                                fontFamily: 'PoppinsReg', color: Colors.black),
+                                fontFamily: 'PoppinsBold', color: Colors.black),
                           ),
                           validator: (val) {
                             if (val.isEmpty) {
@@ -246,7 +272,7 @@ class _AddProductState extends State<AddProduct> {
                           decoration: InputDecoration(
                             labelText: 'Description',
                             labelStyle: TextStyle(
-                                fontFamily: 'PoppinsReg', color: Colors.black),
+                                fontFamily: 'PoppinsBold', color: Colors.black),
                           ),
                           validator: (val) {
                             if (val.isEmpty) {
@@ -273,7 +299,7 @@ class _AddProductState extends State<AddProduct> {
                           decoration: InputDecoration(
                             labelText: 'Stock',
                             labelStyle: TextStyle(
-                                fontFamily: 'PoppinsReg', color: Colors.black),
+                                fontFamily: 'PoppinsBold', color: Colors.black),
                           ),
                           validator: (val) {
                             if (val.isEmpty) {
@@ -297,7 +323,7 @@ class _AddProductState extends State<AddProduct> {
                           decoration: InputDecoration(
                             labelText: 'Price',
                             labelStyle: TextStyle(
-                                fontFamily: 'PoppinsReg', color: Colors.black),
+                                fontFamily: 'PoppinsBold', color: Colors.black),
                           ),
                           validator: (val) {
                             if (val.isEmpty) {
@@ -314,57 +340,87 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ),
                   SizedBox(height: 10),
-
-                  //TODO: Watch THis fking code
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      items:
-                          listCategoryProducts.map<DropdownMenuItem>((value) {
-                        return DropdownMenuItem(
-                            child: Text(value), value: value);
-                      }).toList(),
-
-                      // text
-                      value: selectedProducts,
-                      style: TextStyle(
-                          fontFamily: 'PoppinsReg', color: Colors.black),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedProducts = value;
-                        });
-                      },
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Product Category',
+                          style: TextStyle(
+                              fontFamily: 'PoppinsBold',
+                              color: Colors.black,
+                              fontSize: 16)),
+                      Text('Product Condition',
+                          style: TextStyle(
+                              fontFamily: 'PoppinsBold',
+                              color: Colors.black,
+                              fontSize: 16)),
+                    ],
                   ),
+                  //TODO: Watch THis fking code
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          items: listCategoryProducts
+                              .map<DropdownMenuItem>((value) {
+                            return DropdownMenuItem(
+                                child: Text(value), value: value);
+                          }).toList(),
+
+                          // text
+                          value: selectedProducts,
+                          style: TextStyle(
+                              fontFamily: 'PoppinsReg', color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedProducts = value;
+                            });
+                          },
+                        ),
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          items: listProductCondition
+                              .map<DropdownMenuItem>((value) {
+                            return DropdownMenuItem(
+                                child: Text(value), value: value);
+                          }).toList(),
+
+                          // text
+                          value: selectedProductCondition,
+                          style: TextStyle(
+                              fontFamily: 'PoppinsReg', color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedProductCondition = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 10),
 
                   Center(
                     child: FlatButton(
+                      height: 50,
+                      minWidth: double.infinity,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       color: Colors.black,
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          // ADD DATA
-                          // product.add({
-                          //   'name': nameProductController.text,
-                          //   'stock': stockProductController.text ?? 1,
-                          //   'description': descriptionProductController.text,
-                          //   'price': priceProductController.text,
-                          //   'url': '${urlImage}',
-                          //   'location': '${imageLocation}',
-                          // });
-
                           //Add Image Data
                           _uploadImageToFirebase();
-                          // uploadImage2Firebase(context);
                           Navigator.of(context).pop();
-                          // uploadFoodAndImage();
                         }
                       },
-                      child: Text(
-                        "Add Products",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: Text("Add Products",
+                          style: TextStyle(
+                              fontFamily: 'PoppinsBold',
+                              color: Colors.white,
+                              fontSize: 16)),
                     ),
                   ),
                 ],
