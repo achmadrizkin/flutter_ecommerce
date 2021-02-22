@@ -95,16 +95,38 @@ class ProductSearch extends SearchDelegate<String> {
                                 productCondition: ds['condition'],
                               )));
                     },
-                    child: ListTile(
-                      title: Text('${ds['name']}'),
-                      subtitle: Text('${ds['stock']}'),
-                      leading: Text('${ds['price']}'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Card(
+                        child: ListTile(
+                          title: Text('${ds['name']}',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'PoppinsBold',
+                                  fontSize: 16.0)),
+                          subtitle: Text(
+                              '€${ds['price']} • Stock: ${ds['stock']}',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'PoppinsReg',
+                                  fontSize: 12)),
+                          leading: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: 44,
+                              minHeight: 44,
+                              maxWidth: 64,
+                              maxHeight: 64,
+                            ),
+                            child: Image.network(ds['url'], fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 }),
           );
         } else {
-          return Text('Null');
+          return Text('');
         }
       },
     );
