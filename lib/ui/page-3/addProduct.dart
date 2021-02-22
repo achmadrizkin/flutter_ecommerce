@@ -28,7 +28,8 @@ class _AddProductState extends State<AddProduct> {
     'Book',
     'Food',
     'Shoes',
-    'Electronics'
+    'Electronics',
+    'Other'
   ];
 
   String selectedProductCondition = 'New';
