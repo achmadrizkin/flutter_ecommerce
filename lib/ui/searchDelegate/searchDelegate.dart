@@ -87,11 +87,12 @@ class ProductSearch extends SearchDelegate<String> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => SearchDetails(
-                                name: ds['name'],
+                                productName: ds['name'],
                                 price: ds['price'],
                                 stock: ds['stock'],
                                 imageUrl: ds['url'],
                                 details: ds['description'],
+                                productCondition: ds['condition'],
                               )));
                     },
                     child: ListTile(
