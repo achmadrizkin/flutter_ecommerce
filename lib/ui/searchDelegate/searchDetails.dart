@@ -130,10 +130,49 @@ class SearchDetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10),
                   child: Text(details,
+                      maxLines: 30,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.black,
                           fontFamily: 'PoppinsReg')),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FlatButton(
+                      height: 50,
+                      minWidth: MediaQuery.of(context).size.width / 2.3,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      color: Colors.deepOrange,
+                      onPressed: () {},
+                      child: Text("+ Add to cart",
+                          style: TextStyle(
+                              fontFamily: 'PoppinsBold',
+                              color: Colors.white,
+                              fontSize: 16)),
+                    ),
+                    FlatButton(
+                      height: 50,
+                      minWidth: MediaQuery.of(context).size.width / 2.3,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.deepOrange,
+                              width: 2,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      color: Colors.white,
+                      onPressed: () {},
+                      child: Text("Buy Products",
+                          style: TextStyle(
+                              fontFamily: 'PoppinsBold',
+                              color: Colors.deepOrange,
+                              fontSize: 16)),
+                    ),
+                  ],
                 ),
               ],
             ),
