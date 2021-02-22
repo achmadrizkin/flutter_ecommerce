@@ -48,6 +48,28 @@ class UserProfile extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: 10.0),
+              Card(
+                child: ListTile(
+                    title: Text('Add Product',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'PoppinsBold',
+                            fontSize: 18)),
+                    leading: Icon(Icons.add_shopping_cart,
+                        color: Colors.black, size: 24)),
+              ),
+              SizedBox(height: 10.0),
+              Card(
+                child: ListTile(
+                    title: Text('Add Product',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'PoppinsBold',
+                            fontSize: 18)),
+                    leading: Icon(Icons.add_shopping_cart,
+                        color: Colors.black, size: 24)),
+              ),
             ],
           ),
         ),
