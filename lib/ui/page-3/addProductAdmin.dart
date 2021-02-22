@@ -343,7 +343,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Product Category',
+                      Text('Product Event',
                           style: TextStyle(
                               fontFamily: 'PoppinsBold',
                               color: Colors.black,
