@@ -221,16 +221,18 @@ class _HomePageState extends State<HomePage> {
                             DocumentSnapshot ds = snapshot.data.docs[index];
 
                             return GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .push(new MaterialPageRoute(
-                                      builder: (context) => new ProductDetails(
-                                            productName: ds['name'],
-                                            price: ds['price'],
-                                            stock: ds['stock'],
-                                            imageUrl: ds['url'],
-                                            details: ds['description'],
-                                            productCondition: ds['condition'],
-                                          ))),
+                              onTap: () => Navigator.of(context).push(
+                                new MaterialPageRoute(
+                                  builder: (context) => new ProductDetails(
+                                    productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
+                                  ),
+                                ),
+                              ),
                               child: containerProduct(
                                   '${ds['name']}',
                                   '${ds['price']}',

@@ -56,7 +56,7 @@ class SearchDetails extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'PoppinsBold',
+                          fontFamily: 'PoppinsMed',
                           fontSize: 20.0)),
                 ),
                 Padding(
@@ -72,7 +72,7 @@ class SearchDetails extends StatelessWidget {
                                 text: 'Stock: ' + stock + '  •  ',
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                     fontFamily: 'PoppinsReg')),
                             WidgetSpan(
                                 child: Icon(Icons.star_sharp,
@@ -81,13 +81,13 @@ class SearchDetails extends StatelessWidget {
                                 text: ' 4.9' + '  •  ',
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                     fontFamily: 'PoppinsReg')),
                             TextSpan(
                                 text: 'Condition: ' + productCondition,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                     fontFamily: 'PoppinsReg')),
                           ],
                         ),
@@ -98,11 +98,11 @@ class SearchDetails extends StatelessWidget {
                 SizedBox(height: 10.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10),
-                  child: Text('€' + price,
+                  child: Text('€ ' + price,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.red,
                           fontFamily: 'PoppinsBold',
                           fontSize: 26.0)),
                 ),
@@ -119,7 +119,7 @@ class SearchDetails extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
-                          fontFamily: 'PoppinsReg')),
+                          fontFamily: 'PoppinsMed')),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10),
@@ -134,7 +134,7 @@ class SearchDetails extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontSize: 12,
-                          color: Colors.black,
+                          color: Colors.grey,
                           fontFamily: 'PoppinsReg')),
                 ),
                 SizedBox(height: 10),
