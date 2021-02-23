@@ -120,6 +120,19 @@ class _AddProductState extends State<AddProduct> {
       }
     }
 
+    // search
+    for (int i = 0; i < 2; i++) {
+      indexList.add(nameProductController.text.toLowerCase());
+      indexList.add(nameProductController.text.toUpperCase());
+      indexList.add(nameProductController.text);
+    }
+
+    // dateTime now
+    DateTime now = DateTime.now();
+    var currentTime =
+        new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+
+    //
     if (url != null) {
       await FirebaseFirestore.instance.collection('${selectedProducts}').add({
         'name': nameProductController.text,
@@ -128,6 +141,7 @@ class _AddProductState extends State<AddProduct> {
         'price': priceProductController.text,
         'url': url,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
 
       await FirebaseFirestore.instance.collection('allProduct').add({
@@ -138,6 +152,7 @@ class _AddProductState extends State<AddProduct> {
         'url': url,
         'searchIndex': indexList,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
 
       await FirebaseFirestore.instance.collection('myProduct').add({
@@ -147,6 +162,7 @@ class _AddProductState extends State<AddProduct> {
         'price': priceProductController.text,
         'url': url,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
     }
   }

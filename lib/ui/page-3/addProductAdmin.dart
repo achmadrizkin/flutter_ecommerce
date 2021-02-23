@@ -22,12 +22,12 @@ class _AddProductAdminState extends State<AddProductAdmin> {
   final _formKey = GlobalKey<FormState>();
 
   // drop down bottom
-  String selectedProducts = 'FlashSale';
+  String selectedProducts = 'Flash Sale';
   List listCategoryProducts = [
-    'FlashSale',
-    'BestProduct',
-    'SpecialDiscount',
-    'FeedAdmin'
+    'Flash Sale',
+    'Best Product',
+    'Special Discount',
+    'Feed Admin'
   ];
 
   String selectedProductCondition = 'New';
@@ -111,13 +111,25 @@ class _AddProductAdminState extends State<AddProductAdmin> {
     List<String> splitList = nameProductController.text.split(' ');
     List<String> indexList = [];
 
-    for (int i = 0; i < splitList.length; i++) {
+    for (int i = 0; i <= splitList.length; i++) {
       for (int j = 0; j < splitList[i].length + i; j++) {
         indexList.add(splitList[i].substring(0, j).toLowerCase());
         indexList.add(splitList[i].substring(0, j).toUpperCase());
       }
     }
 
+    // search
+    for (int i = 0; i < 2; i++) {
+      indexList.add(nameProductController.text.toLowerCase());
+      indexList.add(nameProductController.text.toUpperCase());
+    }
+
+    // dateTime now
+    DateTime now = DateTime.now();
+    var currentTime =
+        new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+
+    //
     if (url != null) {
       await FirebaseFirestore.instance.collection('${selectedProducts}').add({
         'name': nameProductController.text,
@@ -126,6 +138,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
         'price': priceProductController.text,
         'url': url,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
 
       await FirebaseFirestore.instance.collection('allProduct').add({
@@ -136,6 +149,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
         'url': url,
         'searchIndex': indexList,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
 
       await FirebaseFirestore.instance.collection('myProduct').add({
@@ -145,6 +159,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
         'price': priceProductController.text,
         'url': url,
         'condition': selectedProductCondition,
+        'date': currentTime,
       });
     }
   }
@@ -165,13 +180,13 @@ class _AddProductAdminState extends State<AddProductAdmin> {
           text: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                  text: 'Add',
+                  text: 'Add Product',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontFamily: 'PoppinsBold')),
               TextSpan(
-                  text: 'Product',
+                  text: '( Admin )',
                   style: TextStyle(
                       fontSize: 18,
                       color: Color(0xFF016DF7),
@@ -343,7 +358,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Product Event',
+                      Text('Product Category',
                           style: TextStyle(
                               fontFamily: 'PoppinsBold',
                               color: Colors.black,
