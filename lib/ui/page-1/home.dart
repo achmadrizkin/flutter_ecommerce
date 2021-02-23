@@ -30,12 +30,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //TODO: ADD FUCKING IMAGE
             Image.network(imageUrl,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 6,
                 fit: BoxFit.cover),
-
             Padding(
               padding: const EdgeInsets.only(left: 5.0, right: 5.0),
               child: Text(nameProduct,
@@ -116,12 +114,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: () {
-                //TODO: ADD FKING SEARCH
                 showSearch(context: context, delegate: ProductSearch());
-
-                // setState(() {
-                //   searchIndicator = !searchIndicator;
-                // });
               },
               icon: Icon(Icons.search, color: Colors.black)),
           IconButton(

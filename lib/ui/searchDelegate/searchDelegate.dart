@@ -8,7 +8,6 @@ class ProductSearch extends SearchDelegate<String> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
     return [
       IconButton(
           icon: Icon(Icons.clear, color: Colors.black),
@@ -20,7 +19,6 @@ class ProductSearch extends SearchDelegate<String> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
     return IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Colors.black),
         onPressed: () {
@@ -31,7 +29,6 @@ class ProductSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
     return StreamBuilder<QuerySnapshot>(
       stream: (query.trim().toLowerCase() == '')
           ? allProductFood.snapshots()
@@ -70,7 +67,7 @@ class ProductSearch extends SearchDelegate<String> {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontFamily: 'PoppinsBold',
+                                  fontFamily: 'PoppinsMed',
                                   fontSize: 16.0)),
                           subtitle: Text(
                               '€${ds['price']} • Stock: ${ds['stock']}',
@@ -104,7 +101,6 @@ class ProductSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
     return StreamBuilder<QuerySnapshot>(
       stream: (query.trim().toLowerCase() == '')
           ? allProductFood.snapshots()
@@ -134,35 +130,32 @@ class ProductSearch extends SearchDelegate<String> {
                                 productCondition: ds['condition'],
                               )));
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Card(
-                        child: ListTile(
-                          title: Text('${ds['name']}',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'PoppinsBold',
-                                  fontSize: 16.0)),
-                          subtitle: Text(
-                              '€${ds['price']} • Stock: ${ds['stock']}',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'PoppinsReg',
-                                  fontSize: 12)),
-                          leading: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: 44,
-                                minHeight: 44,
-                                maxWidth: 64,
-                                maxHeight: 64,
-                              ),
-                              child: Center(
-                                child:
-                                    Image.network(ds['url'], fit: BoxFit.cover),
-                              )),
-                        ),
+                    child: Card(
+                      child: ListTile(
+                        title: Text('${ds['name']}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'PoppinsMed',
+                                fontSize: 16.0)),
+                        subtitle: Text(
+                            '€${ds['price']} • Stock: ${ds['stock']}',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontFamily: 'PoppinsReg',
+                                fontSize: 12)),
+                        leading: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: 44,
+                              minHeight: 44,
+                              maxWidth: 64,
+                              maxHeight: 64,
+                            ),
+                            child: Center(
+                              child:
+                                  Image.network(ds['url'], fit: BoxFit.cover),
+                            )),
                       ),
                     ),
                   );

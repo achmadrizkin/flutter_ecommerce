@@ -111,7 +111,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
     List<String> splitList = nameProductController.text.split(' ');
     List<String> indexList = [];
 
-    for (int i = 0; i <= splitList.length; i++) {
+    for (int i = 0; i < splitList.length; i++) {
       for (int j = 0; j < splitList[i].length + i; j++) {
         indexList.add(splitList[i].substring(0, j).toLowerCase());
         indexList.add(splitList[i].substring(0, j).toUpperCase());
@@ -186,7 +186,7 @@ class _AddProductAdminState extends State<AddProductAdmin> {
                       color: Colors.black,
                       fontFamily: 'PoppinsBold')),
               TextSpan(
-                  text: '( Admin )',
+                  text: '(Admin)',
                   style: TextStyle(
                       fontSize: 18,
                       color: Color(0xFF016DF7),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommers/ui/page-3/addProduct.dart';
-import 'package:flutter_ecommers/ui/page-3/addProductAdmin.dart';
+import 'package:flutter_ecommers/ui/addProduct/addProduct.dart';
+import 'package:flutter_ecommers/ui/addProduct/addProductAdmin.dart';
 import 'package:flutter_ecommers/ui/page-3/myproduct.dart';
 import 'package:flutter_ecommers/ui/page-3/transactionHistory.dart';
 
