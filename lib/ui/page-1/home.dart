@@ -14,30 +14,65 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController searchProductController = TextEditingController();
 
-  Widget containerProduct(String nameProduct, String priceProduct) {
+  Widget containerProduct(String nameProduct, String priceProduct,
+      String imageUrl, String stockProduct, String productCondition) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.3,
-      height: MediaQuery.of(context).size.height / 3,
+      height: MediaQuery.of(context).size.height / 2.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //TODO: ADD FUCKING IMAGE
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 6,
-              color: Colors.black,
+            Image.network(imageUrl,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 6,
+                fit: BoxFit.cover),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Text(nameProduct,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'PoppinsMed',
+                      fontSize: 16.0)),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(nameProduct),
-                Text('E200'),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Text(
+                  'Stock: ' +
+                      stockProduct +
+                      '  •  ' +
+                      'Condition: ' +
+                      productCondition,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: 'PoppinsReg',
+                      fontSize: 10.0)),
             ),
-            Text(priceProduct),
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Text(
+                '€ ' + priceProduct,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'PoppinsBold',
+                    fontSize: 20.0),
+              ),
+            ),
           ],
         ),
       ),
@@ -47,7 +82,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final CollectionReference productFood = firestore.collection('Food');
+
+    //TODO: change this in future
+    final CollectionReference productFood = firestore.collection('allProduct');
 
     //
     final db = FirebaseFirestore.instance;
@@ -170,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Show All Product",
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.red,
+                                color: Colors.black,
                                 fontFamily: 'PoppinsMed')),
                       ),
                     ],
@@ -194,11 +231,19 @@ class _HomePageState extends State<HomePage> {
                               onTap: () => Navigator.of(context)
                                   .push(new MaterialPageRoute(
                                       builder: (context) => new ProductDetails(
-                                            nameProduct: '${ds['name']}',
-                                            emailsProduct: '${ds['email']}',
+                                            productName: ds['name'],
+                                            price: ds['price'],
+                                            stock: ds['stock'],
+                                            imageUrl: ds['url'],
+                                            details: ds['description'],
+                                            productCondition: ds['condition'],
                                           ))),
                               child: containerProduct(
-                                  '${ds['name']}', 'Email: ${ds['email']}'),
+                                  '${ds['name']}',
+                                  '${ds['price']}',
+                                  ds['url'],
+                                  ds['stock'],
+                                  ds['condition']),
                             );
                             // return Container(
                             //   child: Column(
@@ -239,45 +284,45 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Show All Product",
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.red,
+                                color: Colors.black,
                                 fontFamily: 'PoppinsMed')),
                       ),
                     ],
                   ),
                 ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: productFood.snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 3.5,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, int index) {
-                            DocumentSnapshot ds = snapshot.data.docs[index];
+                //   StreamBuilder<QuerySnapshot>(
+                //     stream: productFood.snapshots(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasData) {
+                //         return Container(
+                //           width: double.infinity,
+                //           height: MediaQuery.of(context).size.height / 3.5,
+                //           child: ListView.builder(
+                //             shrinkWrap: true,
+                //             scrollDirection: Axis.horizontal,
+                //             itemCount: snapshot.data.docs.length,
+                //             itemBuilder: (context, int index) {
+                //               DocumentSnapshot ds = snapshot.data.docs[index];
 
-                            return containerProduct(
-                                '${ds['name']}', 'Email: ${ds['email']}');
-                            // return Container(
-                            //   child: Column(
-                            //     children: [
-                            //       Text('Name: ${ds['name']}'),
-                            //       Text('Balance: ${ds['balance']}'),
-                            //       Text('Email: ${ds['email']}'),
-                            //     ],
-                            //   ),
-                            // );
-                          },
-                        ),
-                      );
-                    } else {
-                      return Text("");
-                    }
-                  },
-                ),
+                //               return containerProduct(
+                //                   '${ds['name']}', 'Email: ${ds['email']}');
+                //               // return Container(
+                //               //   child: Column(
+                //               //     children: [
+                //               //       Text('Name: ${ds['name']}'),
+                //               //       Text('Balance: ${ds['balance']}'),
+                //               //       Text('Email: ${ds['email']}'),
+                //               //     ],
+                //               //   ),
+                //               // );
+                //             },
+                //           ),
+                //         );
+                //       } else {
+                //         return Text("");
+                //       }
+                //     },
+                //   ),
               ],
             ),
           ),
