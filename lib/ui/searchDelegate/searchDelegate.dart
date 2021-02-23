@@ -13,7 +13,7 @@ class ProductSearch extends SearchDelegate<String> {
       IconButton(
           icon: Icon(Icons.clear, color: Colors.black),
           onPressed: () {
-            query = '';
+            query = ''.toLowerCase();
           }),
     ];
   }
@@ -33,44 +33,10 @@ class ProductSearch extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
     return StreamBuilder<QuerySnapshot>(
-      stream: (query.trim() == '')
+      stream: (query.trim().toLowerCase() == '')
           ? allProductFood.snapshots()
           : allProductFood
-              .where('searchIndex', arrayContains: query)
-              .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            width: MediaQuery.of(context).size.width * 1,
-            height: MediaQuery.of(context).size.height * 1,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, int index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-                  return ListTile(
-                    title: Text('${ds['name']}'),
-                    subtitle: Text('${ds['stock']}'),
-                    leading: Text('${ds['price']}'),
-                  );
-                }),
-          );
-        } else {
-          return Text('Null');
-        }
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return StreamBuilder<QuerySnapshot>(
-      stream: (query.trim() == '')
-          ? allProductFood.snapshots()
-          : allProductFood
-              .where('searchIndex', arrayContains: query)
+              .where('searchIndex', arrayContains: query.toLowerCase())
               .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -96,10 +62,12 @@ class ProductSearch extends SearchDelegate<String> {
                               )));
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: Card(
                         child: ListTile(
                           title: Text('${ds['name']}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontFamily: 'PoppinsBold',
@@ -111,14 +79,89 @@ class ProductSearch extends SearchDelegate<String> {
                                   fontFamily: 'PoppinsReg',
                                   fontSize: 12)),
                           leading: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minWidth: 44,
-                              minHeight: 44,
-                              maxWidth: 64,
-                              maxHeight: 64,
-                            ),
-                            child: Image.network(ds['url'], fit: BoxFit.cover),
-                          ),
+                              constraints: BoxConstraints(
+                                minWidth: 44,
+                                minHeight: 44,
+                                maxWidth: 64,
+                                maxHeight: 64,
+                              ),
+                              child: Center(
+                                child:
+                                    Image.network(ds['url'], fit: BoxFit.cover),
+                              )),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          );
+        } else {
+          return Text('');
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    return StreamBuilder<QuerySnapshot>(
+      stream: (query.trim().toLowerCase() == '')
+          ? allProductFood.snapshots()
+          : allProductFood
+              .where('searchIndex', arrayContains: query.toLowerCase())
+              .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 1,
+            height: MediaQuery.of(context).size.height * 1,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, int index) {
+                  DocumentSnapshot ds = snapshot.data.docs[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SearchDetails(
+                                productName: ds['name'],
+                                price: ds['price'],
+                                stock: ds['stock'],
+                                imageUrl: ds['url'],
+                                details: ds['description'],
+                                productCondition: ds['condition'],
+                              )));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Card(
+                        child: ListTile(
+                          title: Text('${ds['name']}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'PoppinsBold',
+                                  fontSize: 16.0)),
+                          subtitle: Text(
+                              '€${ds['price']} • Stock: ${ds['stock']}',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'PoppinsReg',
+                                  fontSize: 12)),
+                          leading: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 44,
+                                minHeight: 44,
+                                maxWidth: 64,
+                                maxHeight: 64,
+                              ),
+                              child: Center(
+                                child:
+                                    Image.network(ds['url'], fit: BoxFit.cover),
+                              )),
                         ),
                       ),
                     ),
