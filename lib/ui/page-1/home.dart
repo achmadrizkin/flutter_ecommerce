@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommers/ui/page-1/flashSale.dart';
-import 'package:flutter_ecommers/ui/page-1/productDetails.dart';
 import 'package:flutter_ecommers/ui/page-1/shoppingCart.dart';
 import 'package:flutter_ecommers/ui/page-1/specialDiscount.dart';
+import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 import 'package:flutter_ecommers/ui/searchDelegate/searchDelegate.dart';
 
 class HomePage extends StatefulWidget {
@@ -230,6 +230,7 @@ class _HomePageState extends State<HomePage> {
                                     imageUrl: ds['url'],
                                     details: ds['description'],
                                     productCondition: ds['condition'],
+                                    updateStock: db.doc(ds.id),
                                   ),
                                 ),
                               ),
@@ -253,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     } else {
-                      return Text("");
+                      return Center(child: CircularProgressIndicator());
                     }
                   },
                 ),
