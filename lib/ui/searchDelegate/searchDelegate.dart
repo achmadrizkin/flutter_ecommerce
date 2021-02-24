@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommers/ui/searchDelegate/searchDetails.dart';
+import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 
 class ProductSearch extends SearchDelegate<String> {
   final CollectionReference allProductFood =
       FirebaseFirestore.instance.collection('allProduct');
+
+  // db
+  final db = FirebaseFirestore.instance;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -48,15 +51,19 @@ class ProductSearch extends SearchDelegate<String> {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchDetails(
-                                productName: ds['name'],
-                                price: ds['price'],
-                                stock: ds['stock'],
-                                imageUrl: ds['url'],
-                                details: ds['description'],
-                                productCondition: ds['condition'],
-                              )));
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(
+                          builder: (context) => new ProductDetails(
+                            productName: ds['name'],
+                            price: ds['price'],
+                            stock: ds['stock'],
+                            imageUrl: ds['url'],
+                            details: ds['description'],
+                            productCondition: ds['condition'],
+                            updateStock: db.doc(ds.id),
+                          ),
+                        ),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
@@ -120,15 +127,19 @@ class ProductSearch extends SearchDelegate<String> {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchDetails(
-                                productName: ds['name'],
-                                price: ds['price'],
-                                stock: ds['stock'],
-                                imageUrl: ds['url'],
-                                details: ds['description'],
-                                productCondition: ds['condition'],
-                              )));
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(
+                          builder: (context) => new ProductDetails(
+                            productName: ds['name'],
+                            price: ds['price'],
+                            stock: ds['stock'],
+                            imageUrl: ds['url'],
+                            details: ds['description'],
+                            productCondition: ds['condition'],
+                            updateStock: db.doc(ds.id),
+                          ),
+                        ),
+                      );
                     },
                     child: Card(
                       child: ListTile(
