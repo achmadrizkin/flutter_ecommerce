@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommers/ui/page-1/productDetails.dart';
+import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 
 class FeedsAdmin extends StatefulWidget {
   @override
@@ -8,6 +8,8 @@ class FeedsAdmin extends StatefulWidget {
 }
 
 class _FeedsAdminState extends State<FeedsAdmin> {
+  final db = FirebaseFirestore.instance;
+
   Widget containerFeed(
       String name, DateTime date, String url, String description) {
     return Container(
@@ -123,6 +125,7 @@ class _FeedsAdminState extends State<FeedsAdmin> {
                                 imageUrl: ds['url'],
                                 details: ds['description'],
                                 productCondition: ds['condition'],
+                                updateStock: db.doc(ds.id),
                               ),
                             ));
                           },
