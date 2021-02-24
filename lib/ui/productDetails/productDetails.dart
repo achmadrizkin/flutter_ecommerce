@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatelessWidget {
@@ -7,19 +8,134 @@ class ProductDetails extends StatelessWidget {
   String price;
   String imageUrl;
   String productCondition;
+  DocumentReference updateStock;
 
   ProductDetails(
-      {this.productName,
-      this.stock,
-      this.details,
-      this.price,
-      this.imageUrl,
-      this.productCondition});
+      {@required this.productName,
+      @required this.stock,
+      @required this.details,
+      @required this.price,
+      @required this.imageUrl,
+      @required this.productCondition,
+      @required this.updateStock});
 
   @override
   Widget build(BuildContext context) {
+    int stockProduct = int.parse(stock);
+
+    // dateTime now
+    DateTime now = DateTime.now();
+    var currentTime =
+        new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+
+    // snackbar
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    showSnackbar() {
+      final snackbar = new SnackBar(
+        content: Text('Product added in cart!',
+            style: TextStyle(fontFamily: 'PoppinsMed', color: Colors.white)),
+        duration: Duration(seconds: 2),
+      );
+      scaffoldKey.currentState.showSnackBar(snackbar);
+    }
+
+    showSnackbarPurchases() {
+      final snackbar = new SnackBar(
+        content: Text('Purchases Compleated!',
+            style: TextStyle(fontFamily: 'PoppinsMed', color: Colors.white)),
+        duration: Duration(seconds: 2),
+      );
+      scaffoldKey.currentState.showSnackBar(snackbar);
+    }
+
+    final CollectionReference shoppingCart =
+        FirebaseFirestore.instance.collection('Shopping Cart');
+
+    final CollectionReference productPurchases =
+        FirebaseFirestore.instance.collection('Product Purchases');
+
+    //show dialog
+    String totalProduct;
+    int intProduct = int.parse(totalProduct);
+
+    void showdialog(BuildContext context) {
+      GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              title: Text("Buy Product", style: TextStyle(color: Colors.black)),
+              content: Form(
+                key: formKey,
+                child: TextFormField(
+                  autofocus: true,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    hintText: "00.00",
+                    prefixIcon: Icon(
+                      Icons.euro,
+                      color: Colors.black,
+                    ),
+                  ),
+                  validator: (val) {
+                    if (val.isEmpty) {
+                      return 'Cant be a Empty!';
+                    }
+                    return null;
+                  },
+                  onChanged: (val) {
+                    totalProduct = val;
+                  },
+                ),
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Cancel", style: TextStyle(color: Colors.black)),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    if (formKey.currentState.validate()) {
+                      //ADD DATA
+                      productPurchases.add({
+                        'name': productName,
+                        'stock': stock,
+                        'description': details,
+                        'price': price,
+                        'url': imageUrl,
+                        'condition': productCondition,
+                        'date': currentTime,
+                        'totalPurchases': totalProduct,
+                      });
+
+                      //TODO: Watch this fcking code
+                      updateStock.update({
+                        'stock': stockProduct - intProduct ?? 0,
+                      });
+
+                      showSnackbarPurchases();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text("Buy", style: TextStyle(color: Colors.black)),
+                ),
+              ],
+            );
+          });
+    }
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      key: scaffoldKey,
       appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -148,7 +264,20 @@ class ProductDetails extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       color: Colors.deepOrange,
-                      onPressed: () {},
+                      onPressed: () {
+                        //ADD DATA
+                        shoppingCart.add({
+                          'name': productName,
+                          'stock': stock,
+                          'description': details,
+                          'price': price,
+                          'url': imageUrl,
+                          'condition': productCondition,
+                        });
+
+                        //Show Snack Bar
+                        showSnackbar();
+                      },
                       child: Text("+ Add to cart",
                           style: TextStyle(
                               fontFamily: 'PoppinsBold',
@@ -165,7 +294,10 @@ class ProductDetails extends StatelessWidget {
                               style: BorderStyle.solid),
                           borderRadius: BorderRadius.circular(10.0)),
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        // show dialog
+                        showdialog(context);
+                      },
                       child: Text("Buy Products",
                           style: TextStyle(
                               fontFamily: 'PoppinsBold',
