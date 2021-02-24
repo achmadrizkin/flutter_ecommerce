@@ -68,6 +68,7 @@ class _FeedsAdminState extends State<FeedsAdmin> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     final CollectionReference feedAdmin = firestore.collection('Feed Admin');
+    final db = FirebaseFirestore.instance.collection('Feed Admin');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -95,51 +96,52 @@ class _FeedsAdminState extends State<FeedsAdmin> {
         ),
       ),
       body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: StreamBuilder<QuerySnapshot>(
-            stream: feedAdmin.orderBy('date', descending: true).snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, int index) {
-                      DocumentSnapshot ds = snapshot.data.docs[index];
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: feedAdmin.orderBy('date', descending: true).snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, int index) {
+                        DocumentSnapshot ds = snapshot.data.docs[index];
 
-                      // Date Time Formatter
-                      DateTime formattedDate = ds['date'].toDate();
+                        // Date Time Formatter
+                        DateTime formattedDate = ds['date'].toDate();
 
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) => new ProductDetails(
-                                productName: ds['name'],
-                                price: ds['price'],
-                                stock: ds['stock'],
-                                imageUrl: ds['url'],
-                                details: ds['description'],
-                                productCondition: ds['condition'],
-                                updateStock: db.doc(ds.id),
-                              ),
-                            ));
-                          },
-                          child: containerFeed(ds['name'], formattedDate,
-                              ds['url'], ds['description']),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              } else {
-                return Text("");
-              }
-            },
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (context) => new ProductDetails(
+                                  productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
+                                ),
+                              ));
+                            },
+                            child: containerFeed(ds['name'], formattedDate,
+                                ds['url'], ds['description']),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return Text("");
+                }
+              },
+            ),
           ),
         ),
       ),

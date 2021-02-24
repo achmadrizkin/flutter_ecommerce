@@ -83,9 +83,7 @@ class _HomePageState extends State<HomePage> {
 
     //TODO: change this in future
     final CollectionReference productFood = firestore.collection('allProduct');
-
-    //
-    final db = FirebaseFirestore.instance;
+    final db = FirebaseFirestore.instance.collection('allProduct');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -207,7 +205,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
-                  stream: productFood.snapshots(),
+                  stream: productFood
+                      .where('stock', isGreaterThan: '0')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Container(
@@ -230,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                                     imageUrl: ds['url'],
                                     details: ds['description'],
                                     productCondition: ds['condition'],
-                                    updateStock: db.doc(ds.id),
                                   ),
                                 ),
                               ),

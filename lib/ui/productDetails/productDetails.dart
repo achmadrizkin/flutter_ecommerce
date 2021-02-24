@@ -8,21 +8,18 @@ class ProductDetails extends StatelessWidget {
   String price;
   String imageUrl;
   String productCondition;
-  DocumentReference updateStock;
 
-  ProductDetails(
-      {@required this.productName,
-      @required this.stock,
-      @required this.details,
-      @required this.price,
-      @required this.imageUrl,
-      @required this.productCondition,
-      @required this.updateStock});
+  ProductDetails({
+    @required this.productName,
+    @required this.stock,
+    @required this.details,
+    @required this.price,
+    @required this.imageUrl,
+    @required this.productCondition,
+  });
 
   @override
   Widget build(BuildContext context) {
-    int stockProduct = int.parse(stock);
-
     // dateTime now
     DateTime now = DateTime.now();
     var currentTime =
@@ -53,86 +50,6 @@ class ProductDetails extends StatelessWidget {
 
     final CollectionReference productPurchases =
         FirebaseFirestore.instance.collection('Product Purchases');
-
-    //show dialog
-    String totalProduct;
-    int intProduct = int.parse(totalProduct);
-
-    void showdialog(BuildContext context) {
-      GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              title: Text("Buy Product", style: TextStyle(color: Colors.black)),
-              content: Form(
-                key: formKey,
-                child: TextFormField(
-                  autofocus: true,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.start,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    hintText: "00.00",
-                    prefixIcon: Icon(
-                      Icons.euro,
-                      color: Colors.black,
-                    ),
-                  ),
-                  validator: (val) {
-                    if (val.isEmpty) {
-                      return 'Cant be a Empty!';
-                    }
-                    return null;
-                  },
-                  onChanged: (val) {
-                    totalProduct = val;
-                  },
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Cancel", style: TextStyle(color: Colors.black)),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    if (formKey.currentState.validate()) {
-                      //ADD DATA
-                      productPurchases.add({
-                        'name': productName,
-                        'stock': stock,
-                        'description': details,
-                        'price': price,
-                        'url': imageUrl,
-                        'condition': productCondition,
-                        'date': currentTime,
-                        'totalPurchases': totalProduct,
-                      });
-
-                      //TODO: Watch this fcking code
-                      updateStock.update({
-                        'stock': stockProduct - intProduct ?? 0,
-                      });
-
-                      showSnackbarPurchases();
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Text("Buy", style: TextStyle(color: Colors.black)),
-                ),
-              ],
-            );
-          });
-    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -185,7 +102,7 @@ class ProductDetails extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: 'Stock: ' + stock + '  •  ',
+                                text: 'Stock: ' + '${stock}' + '  •  ',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey,
@@ -295,8 +212,18 @@ class ProductDetails extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.0)),
                       color: Colors.white,
                       onPressed: () {
-                        // show dialog
-                        showdialog(context);
+                        //ADD DATA
+                        productPurchases.add({
+                          'name': productName,
+                          'stock': stock,
+                          'description': details,
+                          'price': price,
+                          'url': imageUrl,
+                          'condition': productCondition,
+                          'date': currentTime,
+                        });
+
+                        showSnackbarPurchases();
                       },
                       child: Text("Buy Products",
                           style: TextStyle(

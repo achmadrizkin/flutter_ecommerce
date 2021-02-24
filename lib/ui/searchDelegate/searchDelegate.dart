@@ -7,7 +7,7 @@ class ProductSearch extends SearchDelegate<String> {
       FirebaseFirestore.instance.collection('allProduct');
 
   // db
-  final db = FirebaseFirestore.instance;
+  final db = FirebaseFirestore.instance.collection('allProduct');
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -54,13 +54,12 @@ class ProductSearch extends SearchDelegate<String> {
                       Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (context) => new ProductDetails(
-                            productName: ds['name'],
-                            price: ds['price'],
-                            stock: ds['stock'],
-                            imageUrl: ds['url'],
-                            details: ds['description'],
-                            productCondition: ds['condition'],
-                            updateStock: db.doc(ds.id),
+                           productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
                           ),
                         ),
                       );
@@ -130,13 +129,12 @@ class ProductSearch extends SearchDelegate<String> {
                       Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (context) => new ProductDetails(
-                            productName: ds['name'],
-                            price: ds['price'],
-                            stock: ds['stock'],
-                            imageUrl: ds['url'],
-                            details: ds['description'],
-                            productCondition: ds['condition'],
-                            updateStock: db.doc(ds.id),
+                           productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
                           ),
                         ),
                       );
