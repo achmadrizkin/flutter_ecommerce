@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommers/ui/page-1/flashSale.dart';
 import 'package:flutter_ecommers/ui/page-1/shoppingCart.dart';
-import 'package:flutter_ecommers/ui/page-1/specialDiscount.dart';
 import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 import 'package:flutter_ecommers/ui/searchDelegate/searchDelegate.dart';
+import 'package:flutter_ecommers/ui/showAllProduct/bestProduct.dart';
+import 'package:flutter_ecommers/ui/showAllProduct/flashSale.dart';
+import 'package:flutter_ecommers/ui/showAllProduct/specialDiscount.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,8 +15,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController searchProductController = TextEditingController();
 
-  Widget containerProduct(String nameProduct, String priceProduct,
-      String imageUrl, String stockProduct, String productCondition) {
+  Widget containerProduct(
+    String nameProduct,
+    String priceProduct,
+    String imageUrl,
+    String stockProduct,
+    String productCondition,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.3,
       height: MediaQuery.of(context).size.height / 2.5,
@@ -81,9 +87,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    //TODO: change this in future
-    final CollectionReference productFood = firestore.collection('allProduct');
-    final db = FirebaseFirestore.instance.collection('allProduct');
+    final CollectionReference productFFlashSale =
+        firestore.collection('Flash Sale');
+    final CollectionReference productSpecialDiscount =
+        firestore.collection('Special Discount');
+    final CollectionReference productBest =
+        firestore.collection('Best Product');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -205,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
-                  stream: productFood
+                  stream: productFFlashSale
                       .where('stock', isGreaterThan: '0')
                       .snapshots(),
                   builder: (context, snapshot) {
@@ -234,21 +243,13 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               child: containerProduct(
-                                  '${ds['name']}',
-                                  '${ds['price']}',
-                                  ds['url'],
-                                  ds['stock'],
-                                  ds['condition']),
+                                '${ds['name']}',
+                                '${ds['price']}',
+                                ds['url'],
+                                ds['stock'],
+                                ds['condition'],
+                              ),
                             );
-                            // return Container(
-                            //   child: Column(
-                            //     children: [
-                            //       Text('Name: ${ds['name']}'),
-                            //       Text('Balance: ${ds['balance']}'),
-                            //       Text('Email: ${ds['email']}'),
-                            //     ],
-                            //   ),
-                            // );
                           },
                         ),
                       );
@@ -257,7 +258,6 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                 ),
-                //TODO: Special Discount
                 SizedBox(
                   height: 10.0,
                 ),
@@ -285,39 +285,123 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                //   StreamBuilder<QuerySnapshot>(
-                //     stream: productFood.snapshots(),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.hasData) {
-                //         return Container(
-                //           width: double.infinity,
-                //           height: MediaQuery.of(context).size.height / 3.5,
-                //           child: ListView.builder(
-                //             shrinkWrap: true,
-                //             scrollDirection: Axis.horizontal,
-                //             itemCount: snapshot.data.docs.length,
-                //             itemBuilder: (context, int index) {
-                //               DocumentSnapshot ds = snapshot.data.docs[index];
+                StreamBuilder<QuerySnapshot>(
+                  stream: productSpecialDiscount
+                      .where('stock', isGreaterThan: '0')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, int index) {
+                            DocumentSnapshot ds = snapshot.data.docs[index];
 
-                //               return containerProduct(
-                //                   '${ds['name']}', 'Email: ${ds['email']}');
-                //               // return Container(
-                //               //   child: Column(
-                //               //     children: [
-                //               //       Text('Name: ${ds['name']}'),
-                //               //       Text('Balance: ${ds['balance']}'),
-                //               //       Text('Email: ${ds['email']}'),
-                //               //     ],
-                //               //   ),
-                //               // );
-                //             },
-                //           ),
-                //         );
-                //       } else {
-                //         return Text("");
-                //       }
-                //     },
-                //   ),
+                            return GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                new MaterialPageRoute(
+                                  builder: (context) => new ProductDetails(
+                                    productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
+                                  ),
+                                ),
+                              ),
+                              child: containerProduct(
+                                '${ds['name']}',
+                                '${ds['price']}',
+                                ds['url'],
+                                ds['stock'],
+                                ds['condition'],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Best Product",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontFamily: 'PoppinsMed')),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => BestProduct()));
+                        },
+                        child: Text("Show All Product",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontFamily: 'PoppinsMed')),
+                      ),
+                    ],
+                  ),
+                ),
+                StreamBuilder<QuerySnapshot>(
+                  stream: productBest
+                      .where('stock', isGreaterThan: '0')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, int index) {
+                            DocumentSnapshot ds = snapshot.data.docs[index];
+
+                            return GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                new MaterialPageRoute(
+                                  builder: (context) => new ProductDetails(
+                                    productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
+                                  ),
+                                ),
+                              ),
+                              child: containerProduct(
+                                '${ds['name']}',
+                                '${ds['price']}',
+                                ds['url'],
+                                ds['stock'],
+                                ds['condition'],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
               ],
             ),
           ),

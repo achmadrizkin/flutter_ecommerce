@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 
-class MyProduct extends StatefulWidget {
+class BestProduct extends StatefulWidget {
   @override
-  _MyProductState createState() => _MyProductState();
+  _BestProductState createState() => _BestProductState();
 }
 
-class _MyProductState extends State<MyProduct> {
+class _BestProductState extends State<BestProduct> {
   //
   Widget containerProduct(
     String nameProduct,
@@ -78,7 +78,8 @@ class _MyProductState extends State<MyProduct> {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final CollectionReference myProduct = firestore.collection('myProduct');
+    final CollectionReference bestProduct =
+        firestore.collection('Best Product');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -90,7 +91,7 @@ class _MyProductState extends State<MyProduct> {
           text: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                  text: 'My',
+                  text: 'Best',
                   style: TextStyle(
                       fontSize: 18,
                       color: Color(0xFF016DF7),
@@ -112,7 +113,7 @@ class _MyProductState extends State<MyProduct> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: StreamBuilder<QuerySnapshot>(
-            stream: myProduct.where('stock', isGreaterThan: '0').snapshots(),
+            stream: bestProduct.where('stock', isGreaterThan: '0').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return GridView.builder(

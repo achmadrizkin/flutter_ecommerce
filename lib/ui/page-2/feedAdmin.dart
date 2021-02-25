@@ -96,53 +96,49 @@ class _FeedsAdminState extends State<FeedsAdmin> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: feedAdmin.orderBy('date', descending: true).snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, int index) {
-                        DocumentSnapshot ds = snapshot.data.docs[index];
+        child: StreamBuilder<QuerySnapshot>(
+          stream: feedAdmin.orderBy('date', descending: true).snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, int index) {
+                    DocumentSnapshot ds = snapshot.data.docs[index];
 
-                        // Date Time Formatter
-                        DateTime formattedDate = ds['date'].toDate();
+                    // Date Time Formatter
+                    DateTime formattedDate = ds['date'].toDate();
 
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (context) => new ProductDetails(
-                                  productName: ds['name'],
-                                    price: ds['price'],
-                                    stock: ds['stock'],
-                                    imageUrl: ds['url'],
-                                    details: ds['description'],
-                                    productCondition: ds['condition'],
-                                ),
-                              ));
-                            },
-                            child: containerFeed(ds['name'], formattedDate,
-                                ds['url'], ds['description']),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return Text("");
-                }
-              },
-            ),
-          ),
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (context) => new ProductDetails(
+                              productName: ds['name'],
+                              price: ds['price'],
+                              stock: ds['stock'],
+                              imageUrl: ds['url'],
+                              details: ds['description'],
+                              productCondition: ds['condition'],
+                            ),
+                          ));
+                        },
+                        child: containerFeed(ds['name'], formattedDate,
+                            ds['url'], ds['description']),
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else {
+              return Text("");
+            }
+          },
         ),
       ),
     );

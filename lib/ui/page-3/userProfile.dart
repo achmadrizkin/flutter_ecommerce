@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommers/ui/addProduct/addProduct.dart';
 import 'package:flutter_ecommers/ui/addProduct/addProductAdmin.dart';
 import 'package:flutter_ecommers/ui/page-3/myproduct.dart';
-import 'package:flutter_ecommers/ui/page-3/transactionHistory.dart';
+import 'package:flutter_ecommers/ui/transactionHistory/transactionHistory.dart';
 
 class UserProfile extends StatelessWidget {
   @override
@@ -16,7 +16,7 @@ class UserProfile extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 4.5,
                 decoration: BoxDecoration(
                     color: Color(0xFF016DF7),
                     borderRadius: BorderRadius.circular(20.0)),
@@ -42,9 +42,9 @@ class UserProfile extends StatelessWidget {
                                   fontFamily: 'PoppinsBold',
                                   fontSize: 24,
                                   color: Colors.white)),
-                          Text('Balance: E5000',
+                          Text('€ 5000',
                               style: TextStyle(
-                                  fontFamily: 'PoppinsReg',
+                                  fontFamily: 'PoppinsMed',
                                   fontSize: 16,
                                   color: Colors.white)),
                         ],
@@ -53,7 +53,8 @@ class UserProfile extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
+
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
