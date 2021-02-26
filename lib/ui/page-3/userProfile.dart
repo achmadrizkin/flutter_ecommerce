@@ -9,6 +9,29 @@ class UserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: RichText(
+          text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'User',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Color(0xFF016DF7),
+                      fontFamily: 'PoppinsBold')),
+              TextSpan(
+                  text: ' Profile',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontFamily: 'PoppinsBold')),
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),

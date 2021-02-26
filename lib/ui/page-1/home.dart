@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommers/ui/page-1/shoppingCart.dart';
+import 'package:flutter_ecommers/ui/productCategory/book.dart';
+import 'package:flutter_ecommers/ui/productCategory/clothes.dart';
+import 'package:flutter_ecommers/ui/productCategory/electronics.dart';
+import 'package:flutter_ecommers/ui/productCategory/shoes.dart';
 import 'package:flutter_ecommers/ui/productDetails/productDetails.dart';
 import 'package:flutter_ecommers/ui/searchDelegate/searchDelegate.dart';
 import 'package:flutter_ecommers/ui/showAllProduct/bestProduct.dart';
@@ -94,6 +98,8 @@ class _HomePageState extends State<HomePage> {
     final CollectionReference productBest =
         firestore.collection('Best Product');
 
+    final CollectionReference otherProduct = firestore.collection('Other');
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -110,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                       fontFamily: 'PoppinsBold')),
               TextSpan(
-                  text: 'Store',
+                  text: ' Store',
                   style: TextStyle(
                       fontSize: 18,
                       color: Color(0xFF016DF7),
@@ -158,14 +164,18 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
                         ),
-                      ),
-                      SizedBox(width: 10.0),
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Clothes()));
+                            },
+                            child: Image.asset(
+                                'images/212-2122762_possible-reward-shirt-clothing-icon.png',
+                                width: 25,
+                                height: 25,
+                                fit: BoxFit.cover),
+                          ),
                         ),
                       ),
                       SizedBox(width: 10.0),
@@ -176,6 +186,21 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
                         ),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Book()));
+                            },
+                            child: Center(
+                              child: Image.asset(
+                                  'images/114-1145878_book-icon-png-transparent-png-download-book-icon.png',
+                                  width: 25,
+                                  height: 25,
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(width: 10.0),
                       Container(
@@ -184,6 +209,35 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
+                        ),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Electronic()));
+                            },
+                            child: Image.asset('images/electronics.png',
+                                width: 25, height: 25, fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.0),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Shoes()));
+                            },
+                            child: Image.asset('images/running-shoes-3.png',
+                                width: 25, height: 25, fit: BoxFit.cover),
+                          ),
                         ),
                       ),
                     ],
@@ -339,6 +393,78 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Best Product",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontFamily: 'PoppinsMed')),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => BestProduct()));
+                        },
+                        child: Text("Show All Product",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontFamily: 'PoppinsMed')),
+                      ),
+                    ],
+                  ),
+                ),
+                StreamBuilder<QuerySnapshot>(
+                  stream: otherProduct
+                      .where('stock', isGreaterThan: '0')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, int index) {
+                            DocumentSnapshot ds = snapshot.data.docs[index];
+
+                            return GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                new MaterialPageRoute(
+                                  builder: (context) => new ProductDetails(
+                                    productName: ds['name'],
+                                    price: ds['price'],
+                                    stock: ds['stock'],
+                                    imageUrl: ds['url'],
+                                    details: ds['description'],
+                                    productCondition: ds['condition'],
+                                  ),
+                                ),
+                              ),
+                              child: containerProduct(
+                                '${ds['name']}',
+                                '${ds['price']}',
+                                ds['url'],
+                                ds['stock'],
+                                ds['condition'],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Other Product",
                           style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,

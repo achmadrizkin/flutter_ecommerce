@@ -26,7 +26,6 @@ class _AddProductState extends State<AddProduct> {
   List listCategoryProducts = [
     'Clothes',
     'Book',
-    'Food',
     'Shoes',
     'Electronics',
     'Other'
