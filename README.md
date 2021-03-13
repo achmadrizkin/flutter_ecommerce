@@ -1,16 +1,34 @@
-# flutter_ecommers
+# ✔️ Flutter E-Commerce with Firebase
 
-A new Flutter project.
+A Flutter app based on the responsive design of the E-Commerce with firebase, created by *Achmad Rizki Nur Fauzie*,
 
-## Getting Started
+## Getting Started 🚀
 
-This project is a starting point for a Flutter application.
+```shell
+- Clone the repo
+- Install the dependicies
+- Run it
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Features
+- Responsive App
+- Splash Screen
+- Curved Navigation Bar
+- Add Product(user) => create products according to categories [Clothes,Book,Shoes,Electronics,Other]
+- Add Product(admin) => create products according to event [Flash Sale,Best Product,Special Discount,Feed Admin]
+- Validator
+- Show all Product from categories and event
+- Add Product to Shopping cart
+- Buy Product
+- Delete Product from Shopping Cart
+- Search Delegate(search by arrayContains, name product)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Plugins
+- cloud_firestore: ^0.16.0+1
+- cupertino_icons: ^1.0.0
+- curved_navigation_bar: ^0.3.7
+- firebase_core: ^0.7.0
+- firebase_storage: ^7.0.0
+- image_picker: ^0.6.7+22
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Preview App (Coming Soon..)
