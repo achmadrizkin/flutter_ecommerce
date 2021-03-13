@@ -22,6 +22,7 @@ A Flutter app based on the responsive design of the E-Commerce with firebase, cr
 - Buy Product
 - Delete Product from Shopping Cart
 - Search Delegate(search by arrayContains, name product)
+- and etc...
 
 ## Plugins
 - cloud_firestore: ^0.16.0+1
